@@ -1,0 +1,29 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour {
+
+	public float tilt;
+	public float speed;
+	private float Xmin = -6.8f, Xmax = 6.8f, Zmin = -4, Zmax = 8;
+
+	void FixedUpdate()
+	{
+		float moveHorizontal = Input.GetAxis("Horizontal");
+		float moveVertical = Input.GetAxis("Vertical");
+
+		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+
+		GetComponent<Rigidbody> ().velocity = movement * speed;
+
+		GetComponent<Rigidbody> ().position = new Vector3
+		(
+				Mathf.Clamp (GetComponent<Rigidbody> ().position.x, Xmin, Xmax),
+				0.0f,
+				Mathf.Clamp (GetComponent<Rigidbody> ().position.z, Zmin, Zmax)
+		);
+
+		GetComponent<Rigidbody> ().rotation = new Vector3 (0.0f, 0.0f, GetComponent<Rigidbody> ().velocity.x * tilt);
+	}
+}
